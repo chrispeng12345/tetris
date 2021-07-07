@@ -263,7 +263,7 @@ class Tetris(): # game
         self.body=[] # all blocks (except current piece)
         self.next=Piece(self.scr,random.choice(['I','J','L','O','S','Z','T']),14,0)
         #self.timeset=False  # 
-        self.dropspeed=0.7 # (sec)
+        self.dropspeed=1.0 # (sec)
         self.combo=False  
         self.holded=False  # (this round)
         self.hold=None
@@ -272,7 +272,7 @@ class Tetris(): # game
             return
         self.exp+=5  # jy+5 (?
         self.level=int(self.exp/1500)+1  # update level and speed
-        self.dropspeed=0.7*(0.9)**self.level 
+        self.dropspeed=1.0*(0.9)**self.level 
         self.current_piece.activated=False  # shut down current_piece
         for i in self.current_piece.body:  # add all blocks into game.body
             self.body.append(i)
@@ -304,7 +304,7 @@ class Tetris(): # game
                         newblock.y+=1
                 self.exp+=100  # jy+100 (da shui B ((((
                 self.level=int(self.exp/1500)+1  # update level&speed
-                self.dropspeed=0.7*(0.9)**self.level
+                self.dropspeed=1.0*(0.9)**self.level
                 if self.combo>=1:  # get bonus if got combo
                     self.exp+=50*self.combo
                 self.body=newbody
