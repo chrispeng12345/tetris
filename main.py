@@ -54,6 +54,8 @@ def main():
                     game.current_piece.hardDrop(game)
                 elif event.key==pygame.K_DOWN:
                     game.current_piece.move(0,1,game)
+                elif event.key==pygame.K_SEMICOLON:
+                        game.printme()
                 elif event.key==pygame.K_c and not game.pause and not game.lost:
                     game.holding()
                 elif event.key==pygame.K_ESCAPE:
@@ -75,9 +77,9 @@ def main():
         scr.fill((255,255,255))
         draw_ui(scr,game)                            # draw background
         drawText(scr,'time: '+str('{:.2f}'.format(t/fps)),10,10,15) # time
-        #if game.timeset:        # to move the piece down every dropspeed
-        #    timetemp=t
-        #    game.timeset=False
+        if game.timeset:        # to move the piece down every dropspeed
+            timetemp=t
+            game.timeset=False
         if t-timetemp==int(fps*game.dropspeed) and not game.lost:
             timetemp=t
             game.current_piece.move(0,1,game)            
@@ -250,6 +252,8 @@ class Piece():  # one piece (((???)))
                     if droprange>21-part.y: # check which is nearest to the ground
                         droprange=21-part.y
         self.move(0,droprange,game) # move there
+        self.activated=False
+        game.add_new_piece()
             
 class Tetris(): # game
     def __init__(self,scr):
@@ -262,11 +266,11 @@ class Tetris(): # game
         self.current_piece.activated=True
         self.body=[] # all blocks (except current piece)
         self.next=Piece(self.scr,random.choice(['I','J','L','O','S','Z','T']),14,0)
-        #self.timeset=False  # 
+        self.timeset=False  # 
         self.dropspeed=1.0 # (sec)
-        self.combo=False  
+        self.combo=-1 
         self.holded=False  # (this round)
-        self.hold=None
+        self.hold=None        
     def add_new_piece(self):  # when a block touches the floor, add a new piece
         if self.lost:
             return
@@ -285,7 +289,7 @@ class Tetris(): # game
                 return
         self.current_piece.activated=True  # activate current_piece,make next piece
         self.next=Piece(self.scr,random.choice(['I','J','L','O','S','Z','T']),14,0)
-        #self.timeset=True
+        self.timeset=True
         self.holded=False  # now can hold another one
     def chkAndDeleteRow(self): # check if a row is full of blocks
         combo=False
@@ -337,7 +341,7 @@ class Tetris(): # game
                     return
             self.current_piece.activated=True
             self.next=Piece(self.scr,random.choice(['I','J','L','O','S','Z','T']),14,0)
-            #self.timeset=True
+            self.timeset=True
         
         self.holded=True  # this round you cannot hold another piece.
         
